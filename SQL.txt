@@ -1,0 +1,59 @@
+-- Для Id лучше использовать UNIQUEIDENTIFIER, но для простоты заполнения выбран INT
+
+CREATE TABLE Category (
+	Id INT PRIMARY KEY,
+	[Name] VARCHAR(50)
+)
+
+CREATE TABLE Product (
+	Id INT PRIMARY KEY,
+	[Name] VARCHAR(100)
+);
+
+CREATE TABLE ProductCategory (
+	ProductId INT,
+	CategoryId INT
+);
+
+INSERT INTO Category(Id, [Name])
+VALUES
+	(1, 'Категория 1'),
+	(2, 'Категория 2'),
+	(3, 'Категория 3'),
+	(4, 'Категория 4'),
+	(5, 'Категория 5');
+
+INSERT INTO Product(Id, [Name])
+VALUES
+	(1, 'Номенклатура 1'),
+	(2, 'Номенклатура 2'),
+	(3, 'Номенклатура 3'),
+	(4, 'Номенклатура 4'),
+	(5, 'Номенклатура 5'),
+	(6, 'Номенклатура 6'),
+	(7, 'Номенклатура 6');
+
+INSERT INTO ProductCategory (ProductId, CategoryId)
+VALUES
+	(1, 1),
+	(2, 1),
+	(2, 2),
+	(3, 1),
+	(3, 2),
+	(3, 3),
+	(4, 1),
+	(4, 2),
+	(4, 3),
+	(4, 4),
+	(4, 5);
+
+SELECT
+	p.[Name] AS ProductName,
+	c.[Name] AS CategoryName,
+	IIF(c.[Name] IS NULL, p.[Name], p.[Name] + ' - ' + c.[Name]) AS TextRepresentation
+FROM
+	Product AS p
+	LEFT JOIN ProductCategory AS pc
+	ON p.Id = pc.ProductId
+	LEFT JOIN Category AS c
+	ON pc.CategoryId = c.Id;
